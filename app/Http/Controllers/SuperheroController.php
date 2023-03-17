@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Superhero;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+
 
 /**
  * Class SuperheroController
@@ -22,6 +24,14 @@ class SuperheroController extends Controller
 
         return view('superhero.index', compact('superheroes'))
             ->with('i', (request()->input('page', 1) - 1) * $superheroes->perPage());
+        // $superheroes = Superhero::onlyTrashed()->get();
+        // return view('superhero.archive', compact('superheroes'));
+    }
+    public function archive()
+    {
+        //$superheroes = Superhero::withTrashed()->orderBy('year','desc')->get();
+        $superheroes = Superhero::onlyTrashed()->get();
+        return view('superhero.archive', compact('superheroes'));
     }
 
     /**
@@ -94,6 +104,19 @@ class SuperheroController extends Controller
             ->with('success', 'Superhero updated successfully');
     }
 
+    
+
+    public function restore($id)
+    {
+        $superhero = Superhero::withTrashed()->findOrFail($id);
+
+        $superhero->restore();
+
+        return redirect()->route('superheroes.index')
+                ->with('success', 'Superhero deleted successfully');
+    }
+
+
     /**
      * @param int $id
      * @return \Illuminate\Http\RedirectResponse
@@ -101,9 +124,37 @@ class SuperheroController extends Controller
      */
     public function destroy($id)
     {
-        $superhero = Superhero::find($id)->delete();
+        //dd($id);
 
+        //Log::info('Destroying superhero with ID ' . $id);
+
+        $superhero = Superhero::withTrashed()->findOrFail($id);
+
+        //dd($superhero);
+
+        if (!$superhero) {
+            // The superhero with the given ID does not exist
+            return redirect()->route('superheroes.index')
+                ->with('error', 'Superhero not found');
+        }
+
+        if ($superhero->trashed()) {
+            // The model has been soft-deleted, so we can force-delete it
+            $superhero->forceDelete();
+            return redirect()->route('superheroes.index')
+                ->with('success', 'Superhero deleted successfully');
+        }
+        
+        // The model has not been soft-deleted, so we can delete it normally
+        $superhero->delete();
+        
         return redirect()->route('superheroes.index')
             ->with('success', 'Superhero deleted successfully');
+
+            //Original funciona
+        // $superhero = Superhero::find($id)->delete();
+
+        // return redirect()->route('superheroes.index')
+        //     ->with('success', 'Superhero deleted successfully');
     }
 }

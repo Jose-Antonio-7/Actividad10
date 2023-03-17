@@ -18,7 +18,27 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource('superheroes', SuperheroController::class);
-Auth::routes();
+Route::get('/superheroes/archive',[SuperheroController::class, 'archive']);
+Route::post('/superheroes/{superhero}/restore', [SuperheroController::class, 'restore'])->name('superheroes.restore');
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+
+Route::delete('/superheroes/{superhero}', [SuperheroController::class, 'destroy']);
+
+
+Route::resource('superheroes', SuperheroController::class);
+
+
+// Route::get('/superheroes/create',[SuperheroController::class, 'create']);
+
+// Route::get('/superheroes.store',[SuperheroController::class, 'store']);
+
+
+// Route::resource('superheroes', SuperheroController::class);
+
+// Route::get('/superheroes',[SuperheroController::class, 'index']);
+
+
+
+
+Auth::routes();

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Class Superhero
@@ -20,6 +21,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Superhero extends Model
 {
+
+    use SoftDeletes;
     
     static $rules = [
 		'realname' => 'required',

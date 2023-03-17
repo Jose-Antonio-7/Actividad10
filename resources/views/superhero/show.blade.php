@@ -22,19 +22,19 @@
                         
                         <div class="form-group">
                             <strong>Realname:</strong>
-                            {{ $superhero->realname }}
+                            {{ $superhero?->realname }}
                         </div>
                         <div class="form-group">
                             <strong>Superheroname:</strong>
-                            {{ $superhero->superheroname }}
+                            {{ $superhero?->superheroname }}
                         </div>
                         <div class="form-group">
                             <strong>Photo:</strong>
-                            {{ $superhero->photo }}
+                            {{ $superhero?->photo }}
                         </div>
                         <div class="form-group">
                             <strong>Information:</strong>
-                            {{ $superhero->information }}
+                             {{ $superhero?->information }} <!--Agreue el ? para que puedan ser nulos -->
                         </div>
 
                     </div>
