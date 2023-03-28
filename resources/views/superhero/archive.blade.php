@@ -66,6 +66,7 @@
                                             <td>
                                                 <form action="{{ route('superheroes.restore', $superhero->id) }}" method="POST">
                                                     @csrf
+                                                    
                                                     @method('POST')
                                                     <button type="submit" class="btn btn-success btn-sm"><i class="fa fa-fw fa-trash"></i> Restore</button>
                                                 </form>
